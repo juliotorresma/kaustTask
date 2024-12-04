@@ -1,7 +1,9 @@
 #include "ofApp.h"
 #include <cmath>
 // Creating a red sphere with radius of 1, 5 units away
-Sphere sphere(Vector3D(0, 0, 5), Vector3D(255, 0, 0), 1);
+Sphere sphere(Vector3D(0, 0, 5), Vector3D(1, 0, 0), 1);
+Cone cone(Vector3D(0, 0, -3), Vector3D(0, 1, 0), Vector3D(0, 1, 0), M_PI / 6);
+
 // Define the viewport postion
 Vector3D viewPortPosition(0,0,0);
 
@@ -34,10 +36,20 @@ void ofApp::draw(){
             // Try to detect sphere
             float sphereT = sphere.detectSphere(viewPortPosition, rayDirection, sphere);
             
+            // Try to detect cone
+            float coneT = cone.detectCone(viewPortPosition, rayDirection, cone);
+            /*
             if (sphereT != 0) {
                 Vector3D hitPoint = ray.origin.add(ray.direction.scale(sphereT));
                 
                 Vector3D color = sphere.color;
+                ofSetColor(color.x * 255, color.y * 255, color.z * 255);
+                ofDrawRectangle(x, y, 1, 1); // Dibujar píxel
+            }*/
+            if (coneT != 0) {
+                Vector3D hitPoint = ray.origin.add(ray.direction.scale(coneT));
+                
+                Vector3D color = cone.color;
                 ofSetColor(color.x * 255, color.y * 255, color.z * 255);
                 ofDrawRectangle(x, y, 1, 1); // Dibujar píxel
             }

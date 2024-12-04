@@ -4,6 +4,7 @@
 #include "Vector3D.h"
 #include "Ray.hpp"
 #include "Sphere.hpp"
+#include "Cone.hpp"
 
 class ofApp : public ofBaseApp{
 

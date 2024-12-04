@@ -21,7 +21,7 @@ public:
     
     Ray();
     // Constructor functions
-    Ray(Vector3D origin, Vector3D direction);
+    Ray(const Vector3D& origin, const Vector3D& direction);
     
     // Select a t for the vector Ray alog t
     Vector3D pointAt(float t);

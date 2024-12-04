@@ -12,7 +12,7 @@
 Ray::Ray() : origin(Vector3D()), direction(Vector3D(0,0,1)){}
 
 // Construct with parameters
-Ray::Ray(Vector3D origin, Vector3D direction): origin(origin), direction(direction){}
+Ray::Ray(const Vector3D& origin, const Vector3D& direction): origin(origin), direction(direction){}
 
 //Select a t for the vector Ray alog t
 Vector3D Ray::pointAt(float t){

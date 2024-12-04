@@ -16,7 +16,10 @@ float Sphere::detectSphere(Vector3D viewportPosition, Vector3D rayDirection, Sph
     float b = rayDirection.scale(2.0f).dot(OC);
     float c = OC.dot(OC) - (sqrt(sphere.radius));
     float sphereDeterminant = b * b - 4*a*c;
-    
-    float t = (-b - sqrt(sphereDeterminant)) / (2.0f * a);
-    if (sphereDeterminant>0) return t; else return 0;
+
+    if (sphereDeterminant>0){
+        float t = (-b - sqrt(sphereDeterminant)) / (2.0f * a);
+        return t;
+    }
+    else return 0;
 }
