@@ -34,8 +34,6 @@ void ofApp::draw(){
             // Creating a Ray
             Ray ray(viewPortPosition, rayDirection);
             // Try to detect sphere
-            
-            /*
             float sphereT = sphere.detectSphere(viewPortPosition, rayDirection, sphere);
             if (sphereT != 0) {
                 Vector3D hitPoint = ray.origin.add(ray.direction.scale(sphereT));
@@ -43,16 +41,20 @@ void ofApp::draw(){
                 Vector3D color = sphere.color;
                 ofSetColor(color.x * 255, color.y * 255, color.z * 255);
                 ofDrawRectangle(x, y, 1, 1); // Dibujar píxel
-            }*/
+            }
             // Try to detect cone
             float coneT = cone.detectCone(viewPortPosition, rayDirection, cone);
             
             if (coneT != 0) {
                 Vector3D hitPoint = ray.origin.add(ray.direction.scale(coneT));
+                Vector3D vectorToIntersection = hitPoint.subtract(cone.vortex);
                 
-                Vector3D color = cone.color;
-                ofSetColor(color.x * 255, color.y * 255, color.z * 255);
-                ofDrawRectangle(x, y, 1, 1); // Dibujar píxel
+                if (vectorToIntersection.dot(cone.centralAxis) >= 0) {
+                    Vector3D color = cone.color;
+                    ofSetColor(color.x * 255, color.y * 255, color.z * 255);
+                    ofDrawRectangle(x, y, 1, 1); // Dibujar píxel
+                }
+                
             }
         }
     }

@@ -28,16 +28,13 @@ float Cone::detectCone(Vector3D viewportPosition,Vector3D rayDirection, Cone con
     Vector3D D = rayDirection;
     Vector3D L = O.subtract(V);
 
-    float a = (rayDirection.dot(cone.centralAxis) * rayDirection.dot(cone.centralAxis)) -
-                 (rayDirection.dot(rayDirection) * cos2);
-       float b = 2 * ((rayDirection.dot(cone.centralAxis) * L.dot(cone.centralAxis)) -
-                      (rayDirection.dot(L) * cos2));
-       float c = (L.dot(cone.centralAxis) * L.dot(cone.centralAxis)) - (L.dot(L) * cos2);
+    float a = (D.dot(C) * D.dot(C)) - (D.dot(D) * cos2);
+    float b = 2 * ((L.dot(C) * D.dot(C)) - (L.dot(D) * cos2));
+    float c = (L.dot(C) * L.dot(C)) - (L.dot(L) * cos2);
 
     float coneDiscriminant = b*b - 4*a*c;
     
     if (coneDiscriminant>0){
-        
         
         // Solve t for the closest point
         float sqrtDiscriminant = sqrt(coneDiscriminant);
