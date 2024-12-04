@@ -26,11 +26,12 @@ float Cone::detectCone(Vector3D viewportPosition,Vector3D rayDirection, Cone con
     Vector3D V = cone.vortex;
     Vector3D D = rayDirection;
     Vector3D L = O.subtract(L);
+
+    float a = (D.dot(C) * D.dot(C)) - (D.dot(D) * cos2);
+    float b = 2 * ((L.dot(C) * D.dot(C)) - (L.dot(D) * cos2));
+    float c = (L.dot(C) * L.dot(C)) - (L.dot(L) * cos2);
     
-    float a = sqrt(D.dot(C))-((D.dot(D))*cos2);
-    float b = 2 * ((L.dot(C))*(D.dot(C))-(L.dot(D))*cos2);
-    float c = sqrt(L.dot(C)) - ((L.dot(L))-cos2);
-    float coneDiscriminant = sqrt(b) - 4*a*c;
+    float coneDiscriminant = b*b - 4*a*c;
     
     
     if (coneDiscriminant>0){

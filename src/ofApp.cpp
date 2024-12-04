@@ -2,7 +2,7 @@
 #include <cmath>
 // Creating a red sphere with radius of 1, 5 units away
 Sphere sphere(Vector3D(0, 0, 5), Vector3D(1, 0, 0), 1);
-Cone cone(Vector3D(0, 0, -3), Vector3D(0, 1, 0), Vector3D(0, 1, 0), M_PI / 6);
+Cone cone(Vector3D(0, 0, -5), Vector3D(0, 1, 0), Vector3D(0, 1, 0), M_PI / 6);
 
 // Define the viewport postion
 Vector3D viewPortPosition(0,0,0);
@@ -34,11 +34,9 @@ void ofApp::draw(){
             // Creating a Ray
             Ray ray(viewPortPosition, rayDirection);
             // Try to detect sphere
-            float sphereT = sphere.detectSphere(viewPortPosition, rayDirection, sphere);
             
-            // Try to detect cone
-            float coneT = cone.detectCone(viewPortPosition, rayDirection, cone);
             /*
+            float sphereT = sphere.detectSphere(viewPortPosition, rayDirection, sphere);
             if (sphereT != 0) {
                 Vector3D hitPoint = ray.origin.add(ray.direction.scale(sphereT));
                 
@@ -46,6 +44,9 @@ void ofApp::draw(){
                 ofSetColor(color.x * 255, color.y * 255, color.z * 255);
                 ofDrawRectangle(x, y, 1, 1); // Dibujar píxel
             }*/
+            // Try to detect cone
+            float coneT = cone.detectCone(viewPortPosition, rayDirection, cone);
+            
             if (coneT != 0) {
                 Vector3D hitPoint = ray.origin.add(ray.direction.scale(coneT));
                 
