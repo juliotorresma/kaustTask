@@ -15,17 +15,17 @@ Vector3D::Vector3D(float xVal, float yVal, float zVal) {
 }
 
 // Sumar dos vectores
-Vector3D Vector3D::add(Vector3D v) {
+Vector3D Vector3D::add(const Vector3D& v) {
     return Vector3D(x + v.x, y + v.y, z + v.z);
 }
 
 // Restar dos vectores
-Vector3D Vector3D::subtract(Vector3D v) {
+Vector3D Vector3D::subtract(const Vector3D& v) {
     return Vector3D(x - v.x, y - v.y, z - v.z);
 }
 
 // Producto punto
-float Vector3D::dot(Vector3D v) {
+float Vector3D::dot(const Vector3D& v) {
     return x * v.x + y * v.y + z * v.z;
 }
 
