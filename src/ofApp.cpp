@@ -4,6 +4,7 @@
 Sphere sphere(Vector3D(0, 0, 5), Vector3D(1, 0, 0), 1);
 Cone cone(Vector3D(-2, -2, -5), Vector3D(0, 1, 0), Vector3D(0, 1, 0), ofDegToRad(30));
 
+
 // Define the viewport postion
 Vector3D viewPortPosition(0,0,0);
 
@@ -49,7 +50,7 @@ void ofApp::draw(){
                 Vector3D hitPoint = ray.origin.add(ray.direction.scale(coneT));
                 Vector3D vectorToIntersection = hitPoint.subtract(cone.vortex);
                 
-                if (vectorToIntersection.dot(cone.centralAxis) >= 0) {
+                if (vectorToIntersection.dot(cone.centralAxis) <= 0) {
                     Vector3D color = cone.color;
                     ofSetColor(color.x * 255, color.y * 255, color.z * 255);
                     ofDrawRectangle(x, y, 1, 1); // Dibujar píxel
