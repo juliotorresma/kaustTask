@@ -5,6 +5,7 @@
 #include "Ray.hpp"
 #include "Sphere.hpp"
 #include "Cone.hpp"
+#include "Ellipsoid.hpp"
 
 class ofApp : public ofBaseApp{
 
