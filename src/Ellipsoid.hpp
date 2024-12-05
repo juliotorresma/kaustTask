@@ -20,8 +20,9 @@ public:
     Vector3D center;
     Vector3D semiAxis;
     
+    
     Ellipsoid(Vector3D center, Vector3D semiAxis): center(center), semiAxis(semiAxis){}
     
-    float detectEllipsoid(Vector3D O, Vector3D D);
+    float detectEllipsoid(Vector3D O, Vector3D D, Vector3D semiAxis);
     
 };
