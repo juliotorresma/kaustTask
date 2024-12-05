@@ -27,17 +27,18 @@ float Ellipsoid::detectEllipsoid(Vector3D O, Vector3D D, Vector3D C ,Vector3D se
      C: Ox^2/a^2 + Oy2/b^2 + Oz^2/c^2 - 1
      */
     Vector3D oc = O.subtract(C);
-    float a = (D.x * D.x) / (semiAxis.x * semiAxis.x) +
-              (D.y * D.y) / (semiAxis.y * semiAxis.y) +
-              (D.z * D.z) / (semiAxis.z * semiAxis.z);
-
-    float b = 2 * ((oc.x * D.x) / (semiAxis.x * semiAxis.x) +
-                   (oc.y * D.y) / (semiAxis.y * semiAxis.y) +
-                   (oc.z * D.z) / (semiAxis.z * semiAxis.z));
-
-    float c = (oc.x * oc.x) / (semiAxis.x * semiAxis.x) +
-              (oc.y * oc.y) / (semiAxis.y * semiAxis.y) +
-              (oc.z * oc.z) / (semiAxis.z * semiAxis.z) - 1;
+    
+    float a =   pow(D.x,2)/pow(semiAxis.x,2) +
+                pow(D.y,2)/pow(semiAxis.y,2) +
+                pow(D.z,2)/pow(semiAxis.z,2);
+    
+    float b = 2*((oc.x * D.x)/pow(semiAxis.x,2) +
+                 (oc.y * D.y)/pow(semiAxis.y,2) +
+                 (oc.z * D.z)/pow(semiAxis.z,2));
+    
+    float c =   (pow(oc.x,2)/pow(semiAxis.x,2)) +
+                (pow(oc.y,2)/pow(semiAxis.y,2)) +
+                (pow(oc.z,2)/pow(semiAxis.z,2))-1;
     
     float discriminant = b*b - 4*a*c;
 

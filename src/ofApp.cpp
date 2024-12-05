@@ -5,7 +5,7 @@ Sphere sphere(Vector3D(0, 0, 5), Vector3D(1, 0, 0), 1);
 
 Cone cone(Vector3D(-2, -2, -5), Vector3D(0, 1, 0), Vector3D(0, 1, 0), ofDegToRad(30));
 
-Ellipsoid ellip(Vector3D(3, 3, -5), Vector3D(.5, .5, 1), Vector3D(0, 0, 1));
+Ellipsoid ellip(Vector3D(3, 3, -5), Vector3D(3, 1, 1), Vector3D(0, 0, 1));
 
 // Define the viewport postion
 Vector3D viewPortPosition(0,0,0);
