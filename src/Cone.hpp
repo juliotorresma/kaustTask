@@ -10,6 +10,7 @@
 
 #include <stdio.h>
 #include "Vector3D.h"
+#include "Ray.hpp"
 #endif /* Cone_hpp */
 
 class Cone{
@@ -25,7 +26,7 @@ public:
          const Vector3D& color,
          float angleOfAxis): vortex(vortex), centralAxis(centralAxis.normalize()), color(color), angleOfAxis(angleOfAxis){}
     
-    float detectCone(Vector3D viewportPosition,
-                     Vector3D rayDirection,
-                     Cone cone);
+    Vector3D detectCone(Vector3D viewportPosition,
+                     Cone cone,
+                     Ray ray);
 };

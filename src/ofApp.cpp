@@ -47,18 +47,12 @@ void ofApp::draw(){
                 ofDrawRectangle(x, y, 1, 1); // Dibujar píxel
             }
             // Try to detect cone
-            float coneT = cone.detectCone(viewingPosition, rayDirection, cone);
+            Vector3D coneColor = cone.detectCone(viewingPosition, cone, ray);
             
-            if (coneT != 0) {
-                Vector3D hitPoint = ray.origin.add(ray.direction.scale(coneT));
-                Vector3D vectorToIntersection = hitPoint.subtract(cone.vortex);
-                
-                
-                if (vectorToIntersection.dot(cone.centralAxis) <= 0) {
-                    Vector3D color = cone.color;
-                    ofSetColor(color.x * 255, color.y * 255, color.z * 255);
-                    ofDrawRectangle(x, y, 1, 1); // Dibujar píxel
-                }
+            
+            if (coneColor.x != 0 || coneColor.y != 0 || coneColor.z != 0) {
+                ofSetColor(coneColor.x * 255, coneColor.y * 255, coneColor.z * 255);
+                ofDrawRectangle(x, y, 1, 1); // Dibujar píxel
             }
             
             Vector3D ellipColor = ellip.detectEllipsoid(viewingPosition, ellip, ray);
