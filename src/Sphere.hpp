@@ -10,6 +10,7 @@
 
 #include <stdio.h>
 #include "Vector3D.h"
+#include "Ray.hpp"
 
 #endif /* Sphere_hpp */
 
@@ -26,9 +27,9 @@ public:
            float radius):
     center(center), color(color), radius(radius){}
     
-    float detectSphere(Vector3D viewportPosition,
-                       Vector3D rayDirection,
-                       Sphere sphere);
+    Vector3D detectSphere(Vector3D viewportPosition,
+                          Sphere sphere,
+                          Ray ray);
     
 };
 

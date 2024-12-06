@@ -37,24 +37,24 @@ void ofApp::draw(){
             
             // Creating a Ray
             Ray ray(viewingPosition, rayDirection);
+            
             // Try to detect sphere
-            float sphereT = sphere.detectSphere(viewingPosition, rayDirection, sphere);
-            if (sphereT != 0) {
-                Vector3D hitPoint = ray.origin.add(ray.direction.scale(sphereT));
-                
-                Vector3D color = sphere.color;
-                ofSetColor(color.x * 255, color.y * 255, color.z * 255);
+            Vector3D sphereColor = sphere.detectSphere(viewingPosition, sphere, ray);
+            
+            if (sphereColor.x != 0 || sphereColor.y != 0 || sphereColor.z != 0) {
+                ofSetColor(sphereColor.x * 255, sphereColor.y * 255, sphereColor.z * 255);
                 ofDrawRectangle(x, y, 1, 1); // Dibujar píxel
             }
+            
             // Try to detect cone
             Vector3D coneColor = cone.detectCone(viewingPosition, cone, ray);
-            
             
             if (coneColor.x != 0 || coneColor.y != 0 || coneColor.z != 0) {
                 ofSetColor(coneColor.x * 255, coneColor.y * 255, coneColor.z * 255);
                 ofDrawRectangle(x, y, 1, 1); // Dibujar píxel
             }
             
+            // Try to detect ellipsoid
             Vector3D ellipColor = ellip.detectEllipsoid(viewingPosition, ellip, ray);
             
             if (ellipColor.x != 0 || ellipColor.y != 0 || ellipColor.z != 0) {
