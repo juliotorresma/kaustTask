@@ -30,6 +30,6 @@ public:
     Vector3D detectSphere(Vector3D viewportPosition,
                           Sphere sphere,
                           Ray ray);
-    
+    Vector3D findNormal(Vector3D pointInT, float a, float b, float c);
 };
 

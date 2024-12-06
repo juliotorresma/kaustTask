@@ -11,6 +11,13 @@
 #include <iostream>
 using namespace std;
 
+Vector3D Ellipsoid::findNormal(Vector3D pointInT, Ellipsoid ellip ,float a, float b, float c){
+    
+    Vector3D normal =  Vector3D((pointInT.x - ellip.center.x) / (a * a),
+                                (pointInT.y - ellip.center.y) / (b * b),
+                                (pointInT.z - ellip.center.z) / (c * c));
+    return normal;
+}
 
 Vector3D Ellipsoid::detectEllipsoid(Vector3D O, Ellipsoid ellip, Ray ray){
     /*
@@ -52,8 +59,9 @@ Vector3D Ellipsoid::detectEllipsoid(Vector3D O, Ellipsoid ellip, Ray ray){
         float tHit;
         if (t0>0) {tHit = t0;}
         else if (t1>0) {tHit = t1;}
-        
         Vector3D hitPoint = ray.origin.add(ray.direction.scale(tHit));
+        
+        Vector3D ellipsoidNormal= ellip.findNormal(hitPoint, ellip, a, b, c);
         
         return ellip.color;
     }

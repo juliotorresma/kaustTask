@@ -27,6 +27,6 @@ public:
     
     Vector3D detectEllipsoid(Vector3D O, Ellipsoid ellip, Ray rayo);
     
-    Vector3D findNormal(Vector3D pointInT, float a, float b, float c);
+    Vector3D findNormal(Vector3D pointInT, Ellipsoid ellip, float a, float b, float c);
     
 };
