@@ -8,12 +8,6 @@
 #include "Ray.hpp"
 #include "Vector3D.h"
 
-// Default construct
-Ray::Ray() : origin(Vector3D()), direction(Vector3D(0,0,1)){}
-
-// Construct with parameters
-Ray::Ray(const Vector3D& origin, const Vector3D& direction): origin(origin), direction(direction){}
-
 //Select a t for the vector Ray alog t
 Vector3D Ray::pointAt(float t){
     return origin.add(direction.scale(t));

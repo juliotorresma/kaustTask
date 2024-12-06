@@ -25,7 +25,7 @@ public:
     
     Ellipsoid(Vector3D center ,Vector3D semiAxis, Vector3D color): center(center), semiAxis(semiAxis), color(color){}
     
-    Vector3D detectEllipsoid(Vector3D O, Ray ray, Vector3D C, Vector3D semiAxis);
+    Vector3D detectEllipsoid(Vector3D O, Ellipsoid ellip, Ray rayo);
     
     Vector3D findNormal(Vector3D pointInT, float a, float b, float c);
     

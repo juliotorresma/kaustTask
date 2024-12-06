@@ -61,10 +61,9 @@ void ofApp::draw(){
                 }
             }
             
-            Vector3D ellipColor = ellip.detectEllipsoid(viewingPosition, ray, ellip.center, ellip.semiAxis);
+            Vector3D ellipColor = ellip.detectEllipsoid(viewingPosition, ellip, ray);
             
-            if (ellipColor.x != 0 && ellipColor.y != 0 && ellipColor.z != 0) {
-                
+            if (ellipColor.x != 0 || ellipColor.y != 0 || ellipColor.z != 0) {
                 ofSetColor(ellipColor.x * 255, ellipColor.y * 255, ellipColor.z * 255);
                 ofDrawRectangle(x, y, 1, 1); // Dibujar píxel
             }

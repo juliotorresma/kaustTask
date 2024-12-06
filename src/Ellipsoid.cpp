@@ -7,17 +7,12 @@
 
 #include "Ellipsoid.hpp"
 #include "Vector3D.h"
-#include "Ray.hpp"
 #include <cmath>
 #include <iostream>
 using namespace std;
 
-Vector3D findNormal(Vector3D pointInT, float a, float b, float c){
-    
-    
-}
 
-Vector3D Ellipsoid::detectEllipsoid(Vector3D O, Ray ray, Vector3D C ,Vector3D semiAxis){
+Vector3D Ellipsoid::detectEllipsoid(Vector3D O, Ellipsoid ellip, Ray ray){
     /*
      x^2/a^2 + y^2/b^2 + z^2/c^2 = 1
      
@@ -32,7 +27,7 @@ Vector3D Ellipsoid::detectEllipsoid(Vector3D O, Ray ray, Vector3D C ,Vector3D se
      B: 2(OxDx/a^2 + OyDy/b^2 + OzDz/c^2)
      C: Ox^2/a^2 + Oy2/b^2 + Oz^2/c^2 - 1
      */
-    Vector3D oc = O.subtract(C);
+    Vector3D oc = O.subtract(ellip.center);
     
     float a =   pow(ray.direction.x,2)/pow(semiAxis.x,2) +
                 pow(ray.direction.y,2)/pow(semiAxis.y,2) +
@@ -47,39 +42,21 @@ Vector3D Ellipsoid::detectEllipsoid(Vector3D O, Ray ray, Vector3D C ,Vector3D se
                 (pow(oc.z,2)/pow(semiAxis.z,2))-1;
     
     float discriminant = b*b - 4*a*c;
-
+    
     
     if (discriminant>0){
         // Solve t for the closest point
         float sqrtDiscriminant = sqrt(discriminant);
         float t0 = (-b - sqrtDiscriminant) / (2 * a);
         float t1 = (-b + sqrtDiscriminant) / (2 * a);
-        
-        
-        
-        float tHit = min(t0, t1);
+        float tHit;
+        if (t0>0) {tHit = t0;}
+        else if (t1>0) {tHit = t1;}
         
         Vector3D hitPoint = ray.origin.add(ray.direction.scale(tHit));
-        Vector3D vectorToIntersection = hitPoint.subtract(C);
         
-        
-        if (vectorToIntersection.dot(cone.centralAxis) <= 0) {
-            Vector3D color = cone.color;
-            ofSetColor(color.x * 255, color.y * 255, color.z * 255);
-            ofDrawRectangle(x, y, 1, 1); // Dibujar píxel
-        }
-        
-        if (t0>0) {
-            
-             t0;
-        }
-        else if (t1>0) {
-            
-            t1;}
-        }
-    
-    
-    return 0;
-    
+        return ellip.color;
+    }
+    return Vector3D(0,0,0);
 }
 
