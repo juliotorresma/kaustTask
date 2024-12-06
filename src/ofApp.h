@@ -6,6 +6,7 @@
 #include "Sphere.hpp"
 #include "Cone.hpp"
 #include "Ellipsoid.hpp"
+#include "Light.hpp"
 
 class ofApp : public ofBaseApp{
 
