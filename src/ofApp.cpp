@@ -8,7 +8,7 @@ Cone cone(Vector3D(-2, -2, -5), Vector3D(0, 1, 0), Vector3D(0, 1, 0), ofDegToRad
 Ellipsoid ellip(Vector3D(3, 3, -5), Vector3D(3, 1, 1), Vector3D(0, 0, 1));
 
 // Define the viewport postion
-Vector3D viewPortPosition(0,0,0);
+Vector3D viewingPosition(0,0,0);
 
 //--------------------------------------------------------------
 void ofApp::setup(){
@@ -28,16 +28,17 @@ void ofApp::draw(){
         for(int y=0; y<height; y++){
             // Normalize coordinates of pixels so they can fit in world space
             float u = (x - width / 2.0f) / (width / 2.0f);
-            float v = (y - height / 2.0f) / (height / 2.0f);
+            float v = (y - height / 1.5f) / (height / 1.5f);
             
             // Define the direction
-            Vector3D pixelInCenter(u,-v,-1);
-            Vector3D rayDirection = pixelInCenter.subtract(viewPortPosition);
+            Vector3D canvasPosition(u,-v,-1);
+            
+            Vector3D rayDirection = canvasPosition.subtract(viewingPosition);
             
             // Creating a Ray
-            Ray ray(viewPortPosition, rayDirection);
+            Ray ray(viewingPosition, rayDirection);
             // Try to detect sphere
-            float sphereT = sphere.detectSphere(viewPortPosition, rayDirection, sphere);
+            float sphereT = sphere.detectSphere(viewingPosition, rayDirection, sphere);
             if (sphereT != 0) {
                 Vector3D hitPoint = ray.origin.add(ray.direction.scale(sphereT));
                 
@@ -46,11 +47,12 @@ void ofApp::draw(){
                 ofDrawRectangle(x, y, 1, 1); // Dibujar píxel
             }
             // Try to detect cone
-            float coneT = cone.detectCone(viewPortPosition, rayDirection, cone);
+            float coneT = cone.detectCone(viewingPosition, rayDirection, cone);
             
             if (coneT != 0) {
                 Vector3D hitPoint = ray.origin.add(ray.direction.scale(coneT));
                 Vector3D vectorToIntersection = hitPoint.subtract(cone.vortex);
+                
                 
                 if (vectorToIntersection.dot(cone.centralAxis) <= 0) {
                     Vector3D color = cone.color;
@@ -58,7 +60,8 @@ void ofApp::draw(){
                     ofDrawRectangle(x, y, 1, 1); // Dibujar píxel
                 }
             }
-            float ellipT = ellip.detectEllipsoid(viewPortPosition, rayDirection, ellip.center, ellip.semiAxis);
+            
+            float ellipT = ellip.detectEllipsoid(viewingPosition, rayDirection, ellip.center, ellip.semiAxis);
             if (ellipT != 0) {
                 Vector3D hitPoint = ray.origin.add(ray.direction.scale(ellipT));
                 Vector3D color = ellip.color;

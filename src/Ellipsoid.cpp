@@ -11,6 +11,11 @@
 #include <iostream>
 using namespace std;
 
+Vector3D findNormal(Vector3D pointInT, float a, float b, float c){
+    
+    
+}
+
 float Ellipsoid::detectEllipsoid(Vector3D O, Vector3D D, Vector3D C ,Vector3D semiAxis){
     /*
      x^2/a^2 + y^2/b^2 + z^2/c^2 = 1
@@ -48,8 +53,13 @@ float Ellipsoid::detectEllipsoid(Vector3D O, Vector3D D, Vector3D C ,Vector3D se
         float sqrtDiscriminant = sqrt(discriminant);
         float t0 = (-b - sqrtDiscriminant) / (2 * a);
         float t1 = (-b + sqrtDiscriminant) / (2 * a);
-        if (t0>0) {return t0;}
-        else if (t1>0) return t1;
+        
+        
+        if (t0>0) {
+            return t0;}
+        else if (t1>0) {
+            
+            return t1;}
     }
     
     
