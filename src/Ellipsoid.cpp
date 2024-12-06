@@ -7,6 +7,7 @@
 
 #include "Ellipsoid.hpp"
 #include "Vector3D.h"
+#include "Ray.hpp"
 #include <cmath>
 #include <iostream>
 using namespace std;
@@ -16,7 +17,7 @@ Vector3D findNormal(Vector3D pointInT, float a, float b, float c){
     
 }
 
-float Ellipsoid::detectEllipsoid(Vector3D O, Vector3D D, Vector3D C ,Vector3D semiAxis){
+Vector3D Ellipsoid::detectEllipsoid(Vector3D O, Ray ray, Vector3D C ,Vector3D semiAxis){
     /*
      x^2/a^2 + y^2/b^2 + z^2/c^2 = 1
      
@@ -33,13 +34,13 @@ float Ellipsoid::detectEllipsoid(Vector3D O, Vector3D D, Vector3D C ,Vector3D se
      */
     Vector3D oc = O.subtract(C);
     
-    float a =   pow(D.x,2)/pow(semiAxis.x,2) +
-                pow(D.y,2)/pow(semiAxis.y,2) +
-                pow(D.z,2)/pow(semiAxis.z,2);
+    float a =   pow(ray.direction.x,2)/pow(semiAxis.x,2) +
+                pow(ray.direction.y,2)/pow(semiAxis.y,2) +
+                pow(ray.direction.z,2)/pow(semiAxis.z,2);
     
-    float b = 2*((oc.x * D.x)/pow(semiAxis.x,2) +
-                 (oc.y * D.y)/pow(semiAxis.y,2) +
-                 (oc.z * D.z)/pow(semiAxis.z,2));
+    float b = 2*((oc.x * ray.direction.x)/pow(semiAxis.x,2) +
+                 (oc.y * ray.direction.y)/pow(semiAxis.y,2) +
+                 (oc.z * ray.direction.z)/pow(semiAxis.z,2));
     
     float c =   (pow(oc.x,2)/pow(semiAxis.x,2)) +
                 (pow(oc.y,2)/pow(semiAxis.y,2)) +
@@ -55,12 +56,27 @@ float Ellipsoid::detectEllipsoid(Vector3D O, Vector3D D, Vector3D C ,Vector3D se
         float t1 = (-b + sqrtDiscriminant) / (2 * a);
         
         
+        
+        float tHit = min(t0, t1);
+        
+        Vector3D hitPoint = ray.origin.add(ray.direction.scale(tHit));
+        Vector3D vectorToIntersection = hitPoint.subtract(C);
+        
+        
+        if (vectorToIntersection.dot(cone.centralAxis) <= 0) {
+            Vector3D color = cone.color;
+            ofSetColor(color.x * 255, color.y * 255, color.z * 255);
+            ofDrawRectangle(x, y, 1, 1); // Dibujar píxel
+        }
+        
         if (t0>0) {
-            return t0;}
+            
+             t0;
+        }
         else if (t1>0) {
             
-            return t1;}
-    }
+            t1;}
+        }
     
     
     return 0;

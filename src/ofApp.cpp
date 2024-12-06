@@ -61,11 +61,11 @@ void ofApp::draw(){
                 }
             }
             
-            float ellipT = ellip.detectEllipsoid(viewingPosition, rayDirection, ellip.center, ellip.semiAxis);
-            if (ellipT != 0) {
-                Vector3D hitPoint = ray.origin.add(ray.direction.scale(ellipT));
-                Vector3D color = ellip.color;
-                ofSetColor(color.x * 255, color.y * 255, color.z * 255);
+            Vector3D ellipColor = ellip.detectEllipsoid(viewingPosition, ray, ellip.center, ellip.semiAxis);
+            
+            if (ellipColor.x != 0 && ellipColor.y != 0 && ellipColor.z != 0) {
+                
+                ofSetColor(ellipColor.x * 255, ellipColor.y * 255, ellipColor.z * 255);
                 ofDrawRectangle(x, y, 1, 1); // Dibujar píxel
             }
         }

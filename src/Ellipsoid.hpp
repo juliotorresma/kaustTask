@@ -12,7 +12,7 @@
 
 #endif /* Ellipsoid_hpp */
 #include "Vector3D.h"
-
+#include "Ray.hpp"
 class Ellipsoid{
   
 public:
@@ -25,7 +25,7 @@ public:
     
     Ellipsoid(Vector3D center ,Vector3D semiAxis, Vector3D color): center(center), semiAxis(semiAxis), color(color){}
     
-    float detectEllipsoid(Vector3D O, Vector3D D, Vector3D C, Vector3D semiAxis);
+    Vector3D detectEllipsoid(Vector3D O, Ray ray, Vector3D C, Vector3D semiAxis);
     
     Vector3D findNormal(Vector3D pointInT, float a, float b, float c);
     
