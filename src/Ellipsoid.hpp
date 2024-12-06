@@ -29,4 +29,6 @@ public:
     
     Vector3D findNormal(Vector3D pointInT, Ellipsoid ellip, float a, float b, float c);
     
+    void changeColor(Ellipsoid ellip);
+    
 };

@@ -16,7 +16,7 @@ Vector3D Ellipsoid::findNormal(Vector3D pointInT, Ellipsoid ellip ,float a, floa
     Vector3D normal =  Vector3D((pointInT.x - ellip.center.x) / (a * a),
                                 (pointInT.y - ellip.center.y) / (b * b),
                                 (pointInT.z - ellip.center.z) / (c * c));
-    return normal;
+    return normal.normalize();
 }
 
 Vector3D Ellipsoid::detectEllipsoid(Vector3D O, Ellipsoid ellip, Ray ray){
@@ -63,7 +63,26 @@ Vector3D Ellipsoid::detectEllipsoid(Vector3D O, Ellipsoid ellip, Ray ray){
         
         Vector3D ellipsoidNormal= ellip.findNormal(hitPoint, ellip, a, b, c);
         
-        return ellip.color;
+        // Shading process
+        Vector3D lightPosition = Vector3D(0,5,0);
+        Vector3D lightColor = Vector3D(1,1,1);
+        Vector3D diffuseReflectanceColor = Vector3D(1,1,1);
+        Vector3D I_a = lightColor.scale(0.2f);
+        
+        // Calculate vector to light
+        Vector3D Ldir = (lightPosition.subtract(hitPoint)).normalize();
+        
+        float lightAngle = ellipsoidNormal.dot(Ldir);
+        if (lightAngle > 0){
+            float Id = (lightColor.dot(diffuseReflectanceColor))*(lightAngle);
+            
+            Vector3D finalLight = I_a.scale(Id);
+            
+            Vector3D finalColor = Vector3D(finalLight.x*diffuseReflectanceColor.x,
+                                           finalLight.y*diffuseReflectanceColor.y,
+                                           finalLight.z*diffuseReflectanceColor.z);
+            return finalColor;
+        }
     }
     return Vector3D(0,0,0);
 }
