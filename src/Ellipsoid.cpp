@@ -9,13 +9,14 @@
 #include "Vector3D.h"
 #include <cmath>
 #include <iostream>
+
 using namespace std;
 
 Vector3D Ellipsoid::findNormal(Vector3D pointInT, Ellipsoid ellip ,float a, float b, float c){
     
-    Vector3D normal =  Vector3D((pointInT.x - ellip.center.x) / (a * a),
-                                (pointInT.y - ellip.center.y) / (b * b),
-                                (pointInT.z - ellip.center.z) / (c * c));
+    Vector3D normal =  Vector3D((pointInT.x - ellip.center.x)/(ellip.semiAxis.x),
+                                (pointInT.y - ellip.center.y)/(ellip.semiAxis.y),
+                                (pointInT.z - ellip.center.z)/(ellip.semiAxis.z));
     return normal.normalize();
 }
 
@@ -50,39 +51,39 @@ Vector3D Ellipsoid::detectEllipsoid(Vector3D O, Ellipsoid ellip, Ray ray){
     
     float discriminant = b*b - 4*a*c;
     
+    Vector3D lightPosition = Vector3D(0,5,0);
+    Vector3D lightColor = Vector3D(1,1,1);
+    Vector3D diffuseReflectanceColor = ellip.color;
+    Vector3D I_a = lightColor.scale(3.0f);
     
-    if (discriminant>0){
+    if (discriminant>=0){
         // Solve t for the closest point
         float sqrtDiscriminant = sqrt(discriminant);
-        float t0 = (-b - sqrtDiscriminant) / (2 * a);
-        float t1 = (-b + sqrtDiscriminant) / (2 * a);
+        float t0 = (-b - sqrtDiscriminant) / (2.0f * a);
+        float t1 = (-b + sqrtDiscriminant) / (2.0f * a);
         float tHit;
-        if (t0>0) {tHit = t0;}
-        else if (t1>0) {tHit = t1;}
+        if (t0 > 0) { tHit = t0; }
+        else if (t1 > 0) { tHit = t1; }
+        else return Vector3D(0,0,0);
+        
         Vector3D hitPoint = ray.origin.add(ray.direction.scale(tHit));
         
         Vector3D ellipsoidNormal= ellip.findNormal(hitPoint, ellip, a, b, c);
         
         // Shading process
-        Vector3D lightPosition = Vector3D(0,5,0);
-        Vector3D lightColor = Vector3D(1,1,1);
-        Vector3D diffuseReflectanceColor = Vector3D(1,1,1);
-        Vector3D I_a = lightColor.scale(0.2f);
+        
         
         // Calculate vector to light
-        Vector3D Ldir = (lightPosition.subtract(hitPoint)).normalize();
+        Vector3D Ldir = lightPosition.subtract(hitPoint).normalize();
         
-        float lightAngle = ellipsoidNormal.dot(Ldir);
-        if (lightAngle > 0){
-            float Id = (lightColor.dot(diffuseReflectanceColor))*(lightAngle);
-            
-            Vector3D finalLight = I_a.scale(Id);
-            
-            Vector3D finalColor = Vector3D(finalLight.x*diffuseReflectanceColor.x,
-                                           finalLight.y*diffuseReflectanceColor.y,
-                                           finalLight.z*diffuseReflectanceColor.z);
+        float lightAngle = std::max(0.0f,ellipsoidNormal.dot(Ldir));
+        if (lightAngle>0){
+            Vector3D finalColor = Vector3D(lightAngle*diffuseReflectanceColor.x *lightColor.x * I_a.x,
+                                           lightAngle*diffuseReflectanceColor.y *lightColor.y * I_a.y,
+                                           lightAngle*diffuseReflectanceColor.z *lightColor.z * I_a.z);
             return finalColor;
         }
+        
     }
     return Vector3D(0,0,0);
 }
