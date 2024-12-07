@@ -6,10 +6,7 @@
 //
 
 #include "Ellipsoid.hpp"
-#include "Vector3D.h"
-#include <cmath>
 #include <iostream>
-
 using namespace std;
 
 Vector3D Ellipsoid::findNormal(Vector3D pointInT, Ellipsoid ellip ,float a, float b, float c){
@@ -75,6 +72,7 @@ Vector3D Ellipsoid::detectEllipsoid(Vector3D O, Ellipsoid ellip, Ray ray){
         Vector3D Ldir = lightPosition.subtract(hitPoint).normalize();
         
         float lightAngle = std::max(0.0f,ellipsoidNormal.dot(Ldir));
+#include <iostream>
         if (lightAngle>0){
             Vector3D finalColor = Vector3D(lightAngle*diffuseReflectanceColor.x *lightColor.x * I_a.x,
                                            lightAngle*diffuseReflectanceColor.y *lightColor.y * I_a.y,

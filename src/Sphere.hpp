@@ -4,37 +4,41 @@
 //
 //  Created by Julio Torres on 03/12/24.
 //
-
 #ifndef Sphere_hpp
 #define Sphere_hpp
-
 #include <stdio.h>
+#include <iostream>
 #include "Vector3D.h"
-#include "Ray.hpp"
 #include "Light.hpp"
-
+#include "SceneObject.hpp"
+#include "Ray.hpp"
 #endif /* Sphere_hpp */
 
-class Sphere{
+using namespace std;
+class Sphere: public SceneObject{
 public:
+    
     Vector3D center;
-    Vector3D color;
+    Vector3D sphereColor;
     
     float radius;
     
     
-    Sphere(const Vector3D& center,
-           const Vector3D& color,
+    Sphere(const Vector3D center,
+           const Vector3D sphereColor,
            float radius):
-    center(center), color(color), radius(radius){}
+    center(center), sphereColor(sphereColor), radius(radius){}
     
-    Vector3D findNormal(Vector3D pointInT, Vector3D center);
+    
+    
+    Vector3D findNormal(Vector3D pointInT, Vector3D center) const;
     Vector3D shading(Ray ray, Light light, Vector3D normal, Vector3D hitPoint);
     
-    bool intersect(Ray ray, float& t, Vector3D color){
+    bool intersect(Ray& ray, float& t, Vector3D& color){
+        cout<<"hola"<<endl;
         
         Vector3D OC = ray.origin.subtract(center);
-        
+        color = sphereColor;
         float a = ray.direction.dot(ray.direction);
         float b = ray.direction.scale(2.0f).dot(OC);
         float c = OC.dot(OC) - (pow(radius,2));

@@ -6,3 +6,7 @@
 //
 
 #include "SceneObject.hpp"
+
+bool SceneObject::intersect(Ray& ray, float& t, Vector3D& color){
+    return false;
+}

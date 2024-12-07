@@ -1,12 +1,7 @@
 #pragma once
-
 #include "ofMain.h"
-#include "Vector3D.h"
-#include "Ray.hpp"
-#include "Sphere.hpp"
-#include "Cone.hpp"
-#include "Ellipsoid.hpp"
-#include "Light.hpp"
+#include <cmath>
+#include <stdio.h>
 
 class ofApp : public ofBaseApp{
 

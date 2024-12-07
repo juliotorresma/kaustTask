@@ -6,7 +6,7 @@
 //
 
 #include "Ray.hpp"
-#include "Vector3D.h"
+
 
 //Select a t for the vector Ray alog t
 Vector3D Ray::pointAt(float t){

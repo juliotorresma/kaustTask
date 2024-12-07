@@ -8,11 +8,11 @@
 #ifndef Light_hpp
 #define Light_hpp
 
-#include <stdio.h>
-#include "Vector3D.h"
 
 #endif /* Light_hpp */
 
+#include <stdio.h>
+#include "Vector3D.h"
 
 class Light{
 public:

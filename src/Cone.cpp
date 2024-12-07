@@ -4,10 +4,8 @@
 //
 //  Created by Julio Torres on 04/12/24.
 //
-
+#pragma once
 #include "Cone.hpp"
-#include <cmath>
-#include <iostream>
 
 using namespace std;
 Vector3D Cone::detectCone(Vector3D viewportPosition, Cone cone, Ray ray){

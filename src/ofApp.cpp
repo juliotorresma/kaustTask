@@ -1,20 +1,33 @@
 #include "ofApp.h"
-#include <cmath>
+#include "Ray.hpp"
+#include "Vector3D.h"
+#include "Sphere.hpp"
+#include "SceneObject.hpp"
+#include <vector>
+#include <memory>
+
+using std::make_shared;
+using std::shared_ptr;
 // Creating a red sphere with radius of 1, 5 units away
-Sphere sphere(Vector3D(0, 0, -5), Vector3D(1, 0, 0), 1);
+//auto sphere_ptr = make_shared<Sphere>(Vector3D(0, 0, -5), Vector3D(1, 0, 0), 1);
 
-Cone cone(Vector3D(-2, -2, -5), Vector3D(0, 1, 0), Vector3D(0, 1, 0), ofDegToRad(30));
+//Cone cone(Vector3D(-2, -2, -5), Vector3D(0, 1, 0), Vector3D(0, 1, 0), ofDegToRad(30));
 
-Ellipsoid ellip(Vector3D(2, 2, -5), Vector3D(2, 1, 1.5), Vector3D(0, 0, 1));
+//Ellipsoid ellip(Vector3D(2, 2, -5), Vector3D(2, 1, 1.5), Vector3D(0, 0, 1));
 
 // lightPosition, lightIntensity, fractionOfLight
-Light light(Vector3D(0,5,5), Vector3D(1,1,1), 1.3f);
+//Light light(Vector3D(0,5,5), Vector3D(1,1,1), 1.3f);
 
 // Define the viewport postion
 Vector3D viewingPosition(0,0,0);
 
+vector<std::unique_ptr<SceneObject>> sceneObjects;
+
+
 //--------------------------------------------------------------
 void ofApp::setup(){
+    
+    sceneObjects.push_back(make_unique<Sphere>(Vector3D(0, 0, -5), Vector3D(1, 0, 0), 1.0f));
     
 }
 
@@ -40,37 +53,19 @@ void ofApp::draw(){
             
             // Creating a Ray
             Ray ray(viewingPosition, rayDirection);
-            
-            // Try to detect sphere
-            /*
-            // Try to detect cone
-        
-            Vector3D coneColor = cone.detectCone(viewingPosition, cone, ray);
-            
-            if (coneColor.x != 0 || coneColor.y != 0 || coneColor.z != 0) {
-                ofSetColor(coneColor.x * 255, coneColor.y * 255, coneColor.z * 255);
-                ofDrawRectangle(x, y, 1, 1); // Dibujar píxel
+            for (const auto& obj : sceneObjects){
+                float t;
+                Vector3D hitColor;
+                
+                if (obj->intersect(ray, t, hitColor)) {
+                    cout<<"Encontré objeto"<<endl;
+                }
+                
+                
             }
-            */
-            
-            // Try to detect ellipsoid
-            Vector3D ellipColor = ellip.detectEllipsoid(viewingPosition, ellip, ray);
-            if (ellipColor.x != 0 || ellipColor.y != 0 || ellipColor.z != 0) {
-                ofSetColor(ellipColor.x * 255, ellipColor.y * 255, ellipColor.z * 255);
-                ofDrawRectangle(x, y, 1, 1); // Dibujar píxel
-            }
-            
-            Vector3D sphereColor = sphere.detectSphere(viewingPosition, sphere, ray);
-            
-            if (sphereColor.x != 0 || sphereColor.y != 0 || sphereColor.z != 0) {
-                ofSetColor(sphereColor.x * 255, sphereColor.y * 255, sphereColor.z * 255);
-                ofDrawRectangle(x, y, 1, 1); // Dibujar píxel
-            }
-            
         }
     }
 }
-
 //--------------------------------------------------------------
 void ofApp::exit(){
 

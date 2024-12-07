@@ -5,11 +5,13 @@
 //  Created by Julio Torres on 03/12/24.
 //
 
-#include "Vector3D.h"
+#pragma once
 #include <stdio.h>
 #include <cmath>
+#include "Vector3D.h"
 
-#pragma once
+
+
 class Ray{
 public:
     Vector3D origin;

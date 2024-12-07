@@ -13,6 +13,7 @@
 #endif /* Ellipsoid_hpp */
 #include "Vector3D.h"
 #include "Ray.hpp"
+
 class Ellipsoid{
   
 public:
