@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		B19045012D02206E009995A9 /* Ellipsoid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B19044FF2D02206E009995A9 /* Ellipsoid.cpp */; };
+		B1C595B92D0384DF0021318B /* Light.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B1C595B72D0384DF0021318B /* Light.cpp */; };
+		B1C595BC2D038A410021318B /* SceneObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B1C595BA2D038A410021318B /* SceneObject.cpp */; };
 		B1F62DEC2CFFD1270066CB48 /* Vector3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B1F62DEB2CFFD1270066CB48 /* Vector3D.cpp */; };
 		B1F62DEF2D0006670066CB48 /* Ray.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B1F62DED2D0006670066CB48 /* Ray.cpp */; };
 		B1F62DF22D000FA70066CB48 /* Sphere.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B1F62DF02D000FA70066CB48 /* Sphere.cpp */; };
@@ -42,6 +44,10 @@
 		191EF70929D778A400F35F26 /* openFrameworks */ = {isa = PBXFileReference; lastKnownFileType = folder; name = openFrameworks; path = /Users/juliotorresma/Downloads/of_v0.12.0_osx_release/libs/openFrameworks; sourceTree = SOURCE_ROOT; };
 		B19044FF2D02206E009995A9 /* Ellipsoid.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Ellipsoid.cpp; sourceTree = "<group>"; };
 		B19045002D02206E009995A9 /* Ellipsoid.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Ellipsoid.hpp; sourceTree = "<group>"; };
+		B1C595B72D0384DF0021318B /* Light.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Light.cpp; sourceTree = "<group>"; };
+		B1C595B82D0384DF0021318B /* Light.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Light.hpp; sourceTree = "<group>"; };
+		B1C595BA2D038A410021318B /* SceneObject.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SceneObject.cpp; sourceTree = "<group>"; };
+		B1C595BB2D038A410021318B /* SceneObject.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SceneObject.hpp; sourceTree = "<group>"; };
 		B1F62DEA2CFFD0F90066CB48 /* Vector3D.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Vector3D.h; sourceTree = "<group>"; };
 		B1F62DEB2CFFD1270066CB48 /* Vector3D.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Vector3D.cpp; sourceTree = "<group>"; };
 		B1F62DED2D0006670066CB48 /* Ray.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Ray.cpp; sourceTree = "<group>"; };
@@ -106,6 +112,10 @@
 				B1F62DF42D00CA560066CB48 /* Cone.hpp */,
 				B19044FF2D02206E009995A9 /* Ellipsoid.cpp */,
 				B19045002D02206E009995A9 /* Ellipsoid.hpp */,
+				B1C595B72D0384DF0021318B /* Light.cpp */,
+				B1C595B82D0384DF0021318B /* Light.hpp */,
+				B1C595BA2D038A410021318B /* SceneObject.cpp */,
+				B1C595BB2D038A410021318B /* SceneObject.hpp */,
 			);
 			path = src;
 			sourceTree = SOURCE_ROOT;
@@ -202,7 +212,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				B1F62DF52D00CA560066CB48 /* Cone.cpp in Sources */,
+				B1C595BC2D038A410021318B /* SceneObject.cpp in Sources */,
 				B1F62DEF2D0006670066CB48 /* Ray.cpp in Sources */,
+				B1C595B92D0384DF0021318B /* Light.cpp in Sources */,
 				E4B69E200A3A1BDC003C02F2 /* main.cpp in Sources */,
 				E4B69E210A3A1BDC003C02F2 /* ofApp.cpp in Sources */,
 				B1F62DF22D000FA70066CB48 /* Sphere.cpp in Sources */,

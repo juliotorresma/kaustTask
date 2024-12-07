@@ -7,31 +7,34 @@
 
 #include "Sphere.hpp"
 #include "Vector3D.h"
+#include "Light.hpp"
 
-Vector3D Sphere::detectSphere(Vector3D viewportPosition, Sphere sphere, Ray ray){
-    
-    Vector3D OC = viewportPosition.subtract(sphere.center);
-    
-    float a = ray.direction.dot(ray.direction);
-    float b = ray.direction.scale(2.0f).dot(OC);
-    float c = OC.dot(OC) - (pow(sphere.radius,2));
-    float sphereDeterminant = b * b - 4*a*c;
-    
-    if (sphereDeterminant>0){
-            
-            // Solve t for the closest point
-            float sqrtDiscriminant = sqrt(sphereDeterminant);
-            float t0 = (-b - sqrtDiscriminant) / (2 * a);
-            float t1 = (-b + sqrtDiscriminant) / (2 * a);
-            float tHit;
-            if (t0>0) {tHit = t0;}
-            else if (t1>0) {tHit = t1;}
+#include <iostream>
 
-            Vector3D hitPoint = ray.origin.add(ray.direction.scale(tHit));
-                
-            return sphere.color;
-            
-        }
+using namespace std;
+
+Vector3D Sphere::shading(Ray ray, Light light, Vector3D normal, Vector3D hitPoint){
     
+    // Calculate vector to light
+    Vector3D Ldir = light.lightPosition.subtract(hitPoint).normalize();
+    
+    float lightAngle = normal.dot(Ldir);
+
+    if (lightAngle>0){
+        
+        Vector3D finalColor = Vector3D(lightAngle*light.diffuseReflectanceColor.x * light.I_a.x,
+                                       lightAngle*light.diffuseReflectanceColor.y * light.I_a.y,
+                                       lightAngle*light.diffuseReflectanceColor.z * light.I_a.z);
+        return finalColor;
+    }
     return Vector3D(0,0,0);
 }
+
+Vector3D Sphere::findNormal(Vector3D pointInT, Vector3D center){
+    
+    Vector3D normal =  Vector3D((pointInT.x - center.x),
+                                (pointInT.y - center.y),
+                                (pointInT.z - center.z));
+    return normal.normalize();
+}
+

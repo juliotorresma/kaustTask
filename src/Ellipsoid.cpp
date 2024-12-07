@@ -51,10 +51,10 @@ Vector3D Ellipsoid::detectEllipsoid(Vector3D O, Ellipsoid ellip, Ray ray){
     
     float discriminant = b*b - 4*a*c;
     
-    Vector3D lightPosition = Vector3D(0,5,0);
+    Vector3D lightPosition = Vector3D(0,5,5);
     Vector3D lightColor = Vector3D(1,1,1);
     Vector3D diffuseReflectanceColor = ellip.color;
-    Vector3D I_a = lightColor.scale(3.0f);
+    Vector3D I_a = lightColor.scale(1.3f);
     
     if (discriminant>=0){
         // Solve t for the closest point
@@ -68,10 +68,8 @@ Vector3D Ellipsoid::detectEllipsoid(Vector3D O, Ellipsoid ellip, Ray ray){
         
         Vector3D hitPoint = ray.origin.add(ray.direction.scale(tHit));
         
+        
         Vector3D ellipsoidNormal= ellip.findNormal(hitPoint, ellip, a, b, c);
-        
-        // Shading process
-        
         
         // Calculate vector to light
         Vector3D Ldir = lightPosition.subtract(hitPoint).normalize();
