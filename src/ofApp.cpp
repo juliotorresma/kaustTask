@@ -50,19 +50,23 @@ void ofApp::draw(){
             Vector3D canvasPosition(u,-v,-1);
             Vector3D rayDirection = canvasPosition.subtract(viewingPosition);
             Ray ray(viewingPosition, rayDirection);
-            
+            float closestT = std::numeric_limits<float>::infinity();
+            Vector3D closestColor(0, 0, 0);
             for (const auto& obj : sceneObjects){
                 float t;
                 Vector3D hitColor;
                 
                 if (obj->intersect(ray, t, hitColor)) {
-                    cout<<"Object detected in t:%f\n";
-                
-                }
-                else{
-                    break;
+                    if (t<closestT){
+                        closestT = t;
+                        closestColor = hitColor;
+                    }
                 }
             }
+            
+            Vector3D hitPoint = ray.origin.add(ray.direction.scale(closestT));
+            ofSetColor(closestColor.x * 255, closestColor.y * 255, closestColor.z * 255);
+            ofDrawRectangle(x, y, 1, 1); // Dibujar píxel
             
             
             // Creating a Ray
