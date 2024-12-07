@@ -26,7 +26,7 @@ vector<std::unique_ptr<SceneObject>> sceneObjects;
 
 //--------------------------------------------------------------
 void ofApp::setup(){
-    
+
     sceneObjects.push_back(make_unique<Sphere>(Vector3D(0, 0, -5), Vector3D(1, 0, 0), 1.0f));
     
 }
@@ -48,21 +48,26 @@ void ofApp::draw(){
             
             // Define the direction
             Vector3D canvasPosition(u,-v,-1);
-            
             Vector3D rayDirection = canvasPosition.subtract(viewingPosition);
-            
-            // Creating a Ray
             Ray ray(viewingPosition, rayDirection);
+            
             for (const auto& obj : sceneObjects){
                 float t;
                 Vector3D hitColor;
                 
                 if (obj->intersect(ray, t, hitColor)) {
-                    cout<<"Encontré objeto"<<endl;
+                    cout<<"Object detected in t:%f\n";
+                
                 }
-                
-                
+                else{
+                    break;
+                }
             }
+            
+            
+            // Creating a Ray
+        
+
         }
     }
 }

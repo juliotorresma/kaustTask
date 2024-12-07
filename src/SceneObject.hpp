@@ -27,7 +27,7 @@ public:
         }
     
     // Método virtual para intersección
-    bool intersect(Ray& ray, float& t, Vector3D& color);
+    virtual bool intersect(Ray ray, float& t, Vector3D& color);
     
     void add(std::vector<SceneObject> sceneObjects);
     
