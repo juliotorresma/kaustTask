@@ -32,7 +32,7 @@ void ofApp::setup(){
     sceneObjects.push_back(make_unique<Sphere>(Vector3D(0, 0, -5), Vector3D(1, 0, 0), 1.0f));
     
     sceneObjects.push_back(make_unique<Ellipsoid>(
-        Vector3D(0, 3, -10),          // Centro de la elipse
+        Vector3D(0, 3, -5),          // Centro de la elipse
         Vector3D(2.0f, 1.0f, 1.5f), // Semi-ejes: X=2.0, Y=1.0, Z=1.5
         Vector3D(0, 0, 1)           // Color: Azul
     ));

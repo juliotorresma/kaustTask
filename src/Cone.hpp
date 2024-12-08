@@ -29,4 +29,6 @@ public:
     Vector3D detectCone(Vector3D viewportPosition,
                      Cone cone,
                      Ray ray);
+    
+    Vector3D findNormal(Vector3D point, Vector3D apex, float angle, float height);
 };

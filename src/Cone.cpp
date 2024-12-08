@@ -4,10 +4,40 @@
 //
 //  Created by Julio Torres on 04/12/24.
 //
-#pragma once
+
 #include "Cone.hpp"
 
 using namespace std;
+
+Vector3D Cone::findNormal(Vector3D point, Vector3D apex, float angle, float height) {
+    // Vector desde el vértice del cono hasta el punto
+    Vector3D v = point.subtract(apex);
+
+    // Proyección del vector en el eje del cono (eje Y, asumido)
+    float projection = v.y;
+
+    // Verificar si el punto está fuera del rango de la altura
+    if (projection < 0 || projection > height) {
+        // Si está fuera del rango, no se puede calcular una normal válida
+        return Vector3D(0, 0, 0); // O lanza una excepción si prefieres
+    }
+
+    // Verificar si el punto está en la base del cono
+    if (projection == height) {
+        return Vector3D(0, -1, 0); // Normal en la base
+    }
+
+    // Calcular la pendiente del cono usando el ángulo
+    float slope = tan(angle);
+
+    // Coordenadas del punto proyectadas sobre la superficie lateral
+    // La normal sin normalizar se calcula considerando la pendiente
+    Vector3D normal(v.x, -slope * sqrt(v.x * v.x + v.z * v.z), v.z);
+
+    // Normalizar el vector
+    return normal.normalize();
+}
+
 Vector3D Cone::detectCone(Vector3D viewportPosition, Cone cone, Ray ray){
     /*
      
