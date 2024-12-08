@@ -10,13 +10,11 @@
 #include <cmath>
 #include "Vector3D.h"
 
-
-
 class Ray{
 public:
     Vector3D origin;
     Vector3D direction;
-
+    
     // Constructor functions
     Ray(Vector3D origin, Vector3D direction): origin(origin), direction(direction){}
     

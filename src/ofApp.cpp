@@ -42,13 +42,15 @@ void ofApp::draw(){
     int height = ofGetHeight();
     for(int x=0; x<width; x++){
         for(int y=0; y<height; y++){
-            // Normalize coordinates of pixels so they can fit in world space
-            float u = (x - width / 2.0f) / (width / 2.0f);
-            float v = (y - height / 1.5f) / (height / 1.5f);
+           
+            float aspectRatio = 640.0f / 480.0f;
+
+            float u = (x - width / 2.0f) / (width / 2.0f) * aspectRatio; // Ajusta el ancho
+            float v = (y - height / 2.0f) / (height / 2.0f);    
             
             // Define the direction
             Vector3D canvasPosition(u,-v,-1);
-            Vector3D rayDirection = canvasPosition.subtract(viewingPosition);
+            Vector3D rayDirection = canvasPosition.subtract(viewingPosition).normalize();;
             Ray ray(viewingPosition, rayDirection);
             float closestT = std::numeric_limits<float>::infinity();
             Vector3D closestColor(0, 0, 0);
@@ -67,10 +69,6 @@ void ofApp::draw(){
             Vector3D hitPoint = ray.origin.add(ray.direction.scale(closestT));
             ofSetColor(closestColor.x * 255, closestColor.y * 255, closestColor.z * 255);
             ofDrawRectangle(x, y, 1, 1); // Dibujar píxel
-            
-            
-            // Creating a Ray
-        
 
         }
     }
