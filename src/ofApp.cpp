@@ -1,6 +1,7 @@
 #include "ofApp.h"
 #include "Ray.hpp"
 #include "Vector3D.h"
+#include "Ellipsoid.hpp"
 #include "Sphere.hpp"
 #include "SceneObject.hpp"
 #include <vector>
@@ -29,6 +30,12 @@ void ofApp::setup(){
 
     sceneObjects.push_back(make_unique<Sphere>(Vector3D(0, 0, -5), Vector3D(1, 0, 0), 1.0f));
     
+    sceneObjects.push_back(make_unique<Ellipsoid>(
+        Vector3D(0, 1, -5),          // Centro de la elipse
+        Vector3D(2.0f, 1.0f, 1.5f), // Semi-ejes: X=2.0, Y=1.0, Z=1.5
+        Vector3D(0, 0, 1)           // Color: Azul
+    ));
+    
 }
 
 //--------------------------------------------------------------
@@ -46,7 +53,7 @@ void ofApp::draw(){
             float aspectRatio = 640.0f / 480.0f;
 
             float u = (x - width / 2.0f) / (width / 2.0f) * aspectRatio; // Ajusta el ancho
-            float v = (y - height / 2.0f) / (height / 2.0f);    
+            float v = (y - height / 2.0f) / (height / 2.0f);
             
             // Define the direction
             Vector3D canvasPosition(u,-v,-1);
