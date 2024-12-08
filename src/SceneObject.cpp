@@ -7,6 +7,6 @@
 
 #include "SceneObject.hpp"
 
-bool SceneObject::intersect(Ray ray, float& t, Vector3D& color){
+bool SceneObject::intersect(Ray ray, float& t, Vector3D& color, Vector3D& normalTHit){
     return false;
 }

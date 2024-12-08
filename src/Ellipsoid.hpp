@@ -27,7 +27,7 @@ public:
     
     Ellipsoid(Vector3D center ,Vector3D semiAxis, Vector3D ellipColor): center(center), semiAxis(semiAxis), ellipColor(ellipColor){}
     
-    virtual bool intersect(Ray ray, float& t, Vector3D& color) {
+    virtual bool intersect(Ray ray, float& t, Vector3D& color, Vector3D& closestNormal) {
         
         Vector3D oc = ray.origin.subtract(center);
         
@@ -54,13 +54,15 @@ public:
             else return false;
             
             color = ellipColor;
+            Vector3D hitPoint = ray.origin.add(ray.direction.scale(t));
+            closestNormal = Ellipsoid::findNormal(hitPoint, semiAxis, center);
             return true;
         }
         
         return false;
     }
     
-    Vector3D findNormal(Vector3D pointInT, Ellipsoid ellip, float a, float b, float c);
+    Vector3D findNormal(Vector3D pointInT, Vector3D semiaxis, Vector3D center);
     
     void changeColor(Ellipsoid ellip);
     

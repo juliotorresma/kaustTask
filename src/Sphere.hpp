@@ -34,7 +34,7 @@ public:
     Vector3D findNormal(Vector3D pointInT, Vector3D center) const;
     Vector3D shading(Ray ray, Light light, Vector3D normal, Vector3D hitPoint);
     
-    virtual bool intersect(Ray ray, float& t, Vector3D& color) {
+    virtual bool intersect(Ray ray, float& t, Vector3D& color, Vector3D& normalTHit) {
         Vector3D OC = ray.origin.subtract(center);
         float a = ray.direction.dot(ray.direction);
         float b = ray.direction.scale(2.0f).dot(OC);
@@ -49,8 +49,9 @@ public:
             if (t0 > 0) t = t0;
             else if (t1 > 0) t = t1;
             else return false;
-            
+            Vector3D hitPoint = ray.origin.add(ray.direction.scale(t));
             color = sphereColor;
+            normalTHit = Sphere::findNormal(hitPoint, center);
             return true;
         }
         

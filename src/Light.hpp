@@ -5,11 +5,7 @@
 //  Created by Julio Torres on 06/12/24.
 //
 
-#ifndef Light_hpp
-#define Light_hpp
-
-
-#endif /* Light_hpp */
+#pragma once
 
 #include <stdio.h>
 #include "Vector3D.h"
@@ -26,7 +22,6 @@ public:
     Light(Vector3D lightPosition,
           Vector3D lightIntensity,
           float fractionOfLight):
-    
             lightPosition(lightPosition),
             lightIntensity(lightIntensity),
             fractionOfLight(fractionOfLight){}

@@ -9,10 +9,10 @@
 #include <iostream>
 using namespace std;
 
-Vector3D Ellipsoid::findNormal(Vector3D pointInT, Ellipsoid ellip ,float a, float b, float c){
+Vector3D Ellipsoid::findNormal(Vector3D pointInT, Vector3D semiaxis, Vector3D center){
     
-    Vector3D normal =  Vector3D((pointInT.x - ellip.center.x)/(ellip.semiAxis.x),
-                                (pointInT.y - ellip.center.y)/(ellip.semiAxis.y),
-                                (pointInT.z - ellip.center.z)/(ellip.semiAxis.z));
+    Vector3D normal =  Vector3D((pointInT.x - center.x)/(semiAxis.x),
+                                (pointInT.y - center.y)/(semiAxis.y),
+                                (pointInT.z - center.z)/(semiAxis.z));
     return normal.normalize();
 }
