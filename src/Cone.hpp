@@ -52,19 +52,18 @@ public:
         float c = (L.dot(C) * L.dot(C)) - (L.dot(L) * cos2);
 
         float coneDiscriminant = b*b - 4*a*c;
-        
+        float tHit;
         if (coneDiscriminant > 0) {
              // Solve t for the closest point
              float sqrtDiscriminant = sqrt(coneDiscriminant);
              float t0 = (-b - sqrtDiscriminant) / (2 * a);
              float t1 = (-b + sqrtDiscriminant) / (2 * a);
-             float tHit;
+             
              if (t1 > 0) {
                  tHit = t1;
-             }else {
-                 return false; // Both intersections are behind the ray
-             }
-
+             }else if (t0 > 0) {
+                 tHit = t0;
+             }else return false;
              // Calculate the point of intersection
              Vector3D hitPoint = ray.origin.add(ray.direction.scale(tHit));
              Vector3D vectorToIntersection = hitPoint.subtract(vortex);
@@ -85,8 +84,23 @@ public:
                  
                  return true;
              }
+            
          }
-        
+        // Intersección con la base del cono
+            Vector3D baseCenter = vortex.add(C.scale(height));
+            float denom = D.dot(C); // Producto punto con la normal del plano de la base
+            
+                float tBase = (baseCenter.subtract(O)).dot(C) / denom;
+                if (tBase > 0) { // Verificar si está más cerca que la superficie
+                    Vector3D hitPoint = ray.origin.add(ray.direction.scale(tBase));
+                    
+                    if (hitPoint.subtract(baseCenter).magnitude() <= height * tan(angleOfAxis)) { // Dentro del radio
+                        t = tBase;
+                        color = coneColor;
+                        //normalTHit = C.scale(-1); // La normal en la base apunta hacia abajo
+                        return true;
+                    }
+            }
         return false;
     }
 
