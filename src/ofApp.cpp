@@ -20,7 +20,7 @@ using std::shared_ptr;
 //Ellipsoid ellip(Vector3D(2, 2, -5), Vector3D(2, 1, 1.5), Vector3D(0, 0, 1));
 
 // lightPosition, lightIntensity, fractionOfLight
-Light light(Vector3D(-1,3,-3), Vector3D(1,1,1), 1.0f);
+Light light(Vector3D(-2,4,-2), Vector3D(1,1,1), 1.5f);
 
 // Define the viewport postion
 Vector3D viewingPosition(0,0,0);
@@ -31,17 +31,17 @@ vector<std::unique_ptr<SceneObject>> sceneObjects;
 //--------------------------------------------------------------
 void ofApp::setup(){
     
-    sceneObjects.push_back(make_unique<Sphere>(Vector3D(-1, 0, -7), Vector3D(1, 0, 0), 1.0f));
+    sceneObjects.push_back(make_unique<Sphere>(Vector3D(0, 0, -5), Vector3D(1, 0, 0), 1.0f));
     
     sceneObjects.push_back(make_unique<Ellipsoid>(
-        Vector3D(-3, 2, -5),          // Centro de la elipse
+        Vector3D(-3, 2, -6),          // Centro de la elipse
         Vector3D(2.0f, 1.0f, 1.5f), // Semi-ejes: X=2.0, Y=1.0, Z=1.5
         Vector3D(0, 0, 1)           // Color: Azul
     ));
     
      
     sceneObjects.push_back(make_unique<Cone>(
-        Vector3D(3, 1, -5), // Posicion de peek
+        Vector3D(3, 1, -4), // Posicion de peek
         Vector3D(0, -1, 0), // Vector de dirección del peek
         Vector3D(0, 1, 0), // Color
         ofDegToRad(30), // Apertura
@@ -49,7 +49,7 @@ void ofApp::setup(){
 
     sceneObjects.push_back(make_unique<Plane>
                            (Vector3D(0,1,0), // normalVector
-                            Vector3D(0,-1.4f,0), // knownPointAtSpace
+                            Vector3D(0,-1.6f,0), // knownPointAtSpace
                             Vector3D(0.5f,0.5f,0.5f))); // planeColor
     
 }
@@ -98,21 +98,48 @@ void ofApp::draw(){
             
             Vector3D hitPoint = ray.origin.add(ray.direction.scale(closestT));
             Vector3D Ldir = light.lightPosition.subtract(hitPoint).normalize();
-                    
-            float lightAngle = std::max(0.0f,closestNormal.dot(Ldir));
             
-            if (lightAngle>0){
-                Vector3D finalColor = Vector3D(lightAngle*closestColor.x *light.lightIntensity.x * light.I_a.x,
-                                               lightAngle*closestColor.y *light.lightIntensity.y * light.I_a.y,
-                                               lightAngle*closestColor.z *light.lightIntensity.z * light.I_a.z);
-                ofSetColor(finalColor.x * 255, finalColor.y * 255, finalColor.z * 255);
-                ofDrawRectangle(x, y, 1, 1); // Dibujar píxel
-            }
-            else{
-                ofSetColor(0, 0, 0);
-                ofDrawRectangle(x, y, 1, 1); // Dibujar píxel
-            }
+                    Ray shadowRay(hitPoint.add(Ldir.scale(1e-3f)), Ldir);
+                    bool inShadow = false;
+                    for (const auto& obj : sceneObjects) {
+                        float t2 = 0;
+                        Vector3D hitColor2, normalTHit2;
+                        if (obj->intersect(shadowRay, t2, hitColor2, normalTHit2)) {
+                            Vector3D shadowHitPoint = shadowRay.origin.add(shadowRay.direction.scale(t2));
+                            float distanceToLight = light.lightPosition.subtract(shadowHitPoint).magnitude();
+                            if (t2 < distanceToLight) {
+                                inShadow = true;
+                                break;
+                            }
+                        }
+                    }
 
+                    // Si el punto está en sombra, dibujar el píxel negro
+                    if (inShadow) {
+                        Vector3D finalColor2 = Vector3D(closestColor.x / light.I_a.x,
+                                                       closestColor.y / light.I_a.y,
+                                                       closestColor.z / light.I_a.z);
+                        
+                        ofSetColor(finalColor2.x, finalColor2.y, finalColor2.z);
+                        ofDrawRectangle(x, y, 1, 1);
+                        
+                    }
+                    else{
+                        float lightAngle = std::max(0.0f,closestNormal.dot(Ldir));
+                        
+                        if (lightAngle>0){
+                            
+                            Vector3D finalColor = Vector3D(lightAngle*closestColor.x *light.lightIntensity.x * light.I_a.x,
+                                                           lightAngle*closestColor.y *light.lightIntensity.y * light.I_a.y,
+                                                           lightAngle*closestColor.z *light.lightIntensity.z * light.I_a.z);
+                            ofSetColor(finalColor.x * 255, finalColor.y * 255, finalColor.z * 255);
+                            ofDrawRectangle(x, y, 1, 1); // Dibujar píxel
+                        }
+                        else{
+                            ofSetColor(0, 0, 0);
+                            ofDrawRectangle(x, y, 1, 1); // Dibujar píxel
+                        }
+                    }
         }
     }
 }
