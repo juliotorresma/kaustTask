@@ -6,6 +6,7 @@
 #include "Cone.hpp"
 #include "SceneObject.hpp"
 #include "Light.hpp"
+#include "Plane.hpp"
 #include <vector>
 #include <memory>
 
@@ -30,10 +31,10 @@ vector<std::unique_ptr<SceneObject>> sceneObjects;
 //--------------------------------------------------------------
 void ofApp::setup(){
     
-    sceneObjects.push_back(make_unique<Sphere>(Vector3D(-1, -2, -7), Vector3D(1, 0, 0), 1.0f));
+    sceneObjects.push_back(make_unique<Sphere>(Vector3D(-1, 0, -7), Vector3D(1, 0, 0), 1.0f));
     
     sceneObjects.push_back(make_unique<Ellipsoid>(
-        Vector3D(-3, 3, -5),          // Centro de la elipse
+        Vector3D(-3, 2, -5),          // Centro de la elipse
         Vector3D(2.0f, 1.0f, 1.5f), // Semi-ejes: X=2.0, Y=1.0, Z=1.5
         Vector3D(0, 0, 1)           // Color: Azul
     ));
@@ -45,6 +46,11 @@ void ofApp::setup(){
         Vector3D(0, 1, 0), // Color
         ofDegToRad(30), // Apertura
         2.0f)); // Altura
+
+    sceneObjects.push_back(make_unique<Plane>
+                           (Vector3D(0,1,0), // normalVector
+                            Vector3D(0,-1.4f,0), // knownPointAtSpace
+                            Vector3D(0.5f,0.5f,0.5f))); // planeColor
     
 }
 
@@ -72,8 +78,10 @@ void ofApp::draw(){
             Ray ray(viewingPosition, rayDirection);
             //Ray ray(Vector3D((x - width / 2.0f) / (width / 2.0f), (y - height / 2.0f) / (height / 2.0f),0), rayDirection);
             float closestT = std::numeric_limits<float>::infinity();
+            
             Vector3D closestColor(0, 0, 0);
             Vector3D closestNormal(0, 0, 0);
+            
             for (const auto& obj : sceneObjects){
                 float t;
                 Vector3D hitColor;

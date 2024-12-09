@@ -20,10 +20,10 @@ public:
     Vector3D normalVector;
     Vector3D knownPointAtSpace;
     
-    Plane(Vector3D planeColor,
-          Vector3D normalVector,
-          Vector3D knownPointAtSpace):
-    planeColor(planeColor),normalVector(normalVector),knownPointAtSpace(knownPointAtSpace){}
+    Plane(Vector3D normalVector,
+            Vector3D knownPointAtSpace,
+            Vector3D planeColor):
+            normalVector(normalVector), knownPointAtSpace(knownPointAtSpace), planeColor(planeColor){}
     
     virtual bool intersect(Ray ray, float& t, Vector3D& color, Vector3D& closestNormal){
         
@@ -36,10 +36,9 @@ public:
         Vector3D normalizedNormal = normalVector.normalize();
         float dotToFindParallel = ray.direction.dot(normalizedNormal);
         
-        if(dotToFindParallel<1e-6){
+        if(fabs(dotToFindParallel)<1e-6){
             return false;
         }
-        
         
         float tHit = normalizedNormal.dot(knownPointAtSpace.subtract(ray.origin))/dotToFindParallel;
         
