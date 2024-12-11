@@ -20,13 +20,34 @@ using std::shared_ptr;
 //Ellipsoid ellip(Vector3D(2, 2, -5), Vector3D(2, 1, 1.5), Vector3D(0, 0, 1));
 
 // lightPosition, lightIntensity, fractionOfLight
-Light light(Vector3D(-2,4,-2), Vector3D(1,1,1), 1.5f);
+Light light(Vector3D(-2,4,-2), Vector3D(1,1,1), 1.5f, Vector3D(1,1,1));
 
 // Define the viewport postion
 Vector3D viewingPosition(0,0,0);
 
 vector<std::unique_ptr<SceneObject>> sceneObjects;
 
+Vector3D phongShading(float lightAngle, Vector3D& closestColor, Vector3D& Ldir, Light& light, Vector3D& viewPosition, Vector3D& closestHitPoint, Vector3D& closestNormal){
+    
+    Vector3D V = viewPosition.subtract(closestHitPoint).normalize();
+    
+    Vector3D H = (Ldir.add(V)).normalize();
+    float specFactor = std::pow(std::max(0.0f, closestNormal.dot(H)), light.phongExponent);
+    
+    Vector3D specular = Vector3D (light.diffuseReflectanceColor.x * light.lightIntensity.x * specFactor,
+                                  light.diffuseReflectanceColor.y * light.lightIntensity.y * specFactor,
+                                  light.diffuseReflectanceColor.z * light.lightIntensity.z * specFactor);
+    
+    return specular;
+}
+
+Vector3D lambertianShading(float lightAngle, Vector3D& closestColor, Vector3D& lightIntensity, Vector3D& I_a){
+    
+    Vector3D lambSColor = Vector3D(lightAngle*closestColor.x *lightIntensity.x * I_a.x,
+                                   lightAngle*closestColor.y *lightIntensity.y * I_a.y,
+                                   lightAngle*closestColor.z *lightIntensity.z * I_a.z);
+    return lambSColor;
+}
 
 //--------------------------------------------------------------
 void ofApp::setup(){
@@ -74,7 +95,7 @@ void ofApp::draw(){
             // Define the direction
             Vector3D canvasPosition(u,-v,-1);
             Vector3D rayDirection = Vector3D(u,-v,-1);
-            //Vector3D rayDirection = canvasPosition.subtract(viewingPosition).normalize();;
+            //Vector3D rayDirection = canvasPosition.subtract(viewingPosition).normalize();
             Ray ray(viewingPosition, rayDirection);
             //Ray ray(Vector3D((x - width / 2.0f) / (width / 2.0f), (y - height / 2.0f) / (height / 2.0f),0), rayDirection);
             float closestT = std::numeric_limits<float>::infinity();
@@ -116,11 +137,8 @@ void ofApp::draw(){
 
                     // Si el punto está en sombra, dibujar el píxel negro
                     if (inShadow) {
-                        Vector3D finalColor2 = Vector3D(closestColor.x / light.I_a.x,
-                                                       closestColor.y / light.I_a.y,
-                                                       closestColor.z / light.I_a.z);
-                        
-                        ofSetColor(finalColor2.x, finalColor2.y, finalColor2.z);
+                        Vector3D finalColor2 = closestColor.scale(0.1f);
+                        ofSetColor(finalColor2.x*255, finalColor2.y*255, finalColor2.z*255);
                         ofDrawRectangle(x, y, 1, 1);
                         
                     }
@@ -129,9 +147,17 @@ void ofApp::draw(){
                         
                         if (lightAngle>0){
                             
-                            Vector3D finalColor = Vector3D(lightAngle*closestColor.x *light.lightIntensity.x * light.I_a.x,
-                                                           lightAngle*closestColor.y *light.lightIntensity.y * light.I_a.y,
-                                                           lightAngle*closestColor.z *light.lightIntensity.z * light.I_a.z);
+                            // Lambertian Shading
+                            Vector3D lambColor = lambertianShading(lightAngle,
+                                                                   closestColor,
+                                                                   light.lightIntensity,
+                                                                   light.I_a);
+                            //Phong shading
+                            Vector3D phongSpecular = phongShading(lightAngle, closestColor,
+                                                  Ldir, light,
+                                                  viewingPosition, hitPoint, closestNormal);
+                           
+                            Vector3D finalColor =lambColor.add(phongSpecular.add(closestColor.scale(0.1f)));
                             ofSetColor(finalColor.x * 255, finalColor.y * 255, finalColor.z * 255);
                             ofDrawRectangle(x, y, 1, 1); // Dibujar píxel
                         }

@@ -81,7 +81,6 @@ public:
                      normalTHit = normalTHit.scale(-1);
                      //normalTHit.z = -normalTHit.z;
                  }
-                 
                  return true;
              }
             
