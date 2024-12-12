@@ -12,14 +12,7 @@
 
 using std::make_shared;
 using std::shared_ptr;
-// Creating a red sphere with radius of 1, 5 units away
-//auto sphere_ptr = make_shared<Sphere>(Vector3D(0, 0, -5), Vector3D(1, 0, 0), 1);
 
-//Cone cone(Vector3D(-2, -2, -5), Vector3D(0, 1, 0), Vector3D(0, 1, 0), ofDegToRad(30));
-
-//Ellipsoid ellip(Vector3D(2, 2, -5), Vector3D(2, 1, 1.5), Vector3D(0, 0, 1));
-
-// lightPosition, lightIntensity, fractionOfLight
 Light light(Vector3D(-2,4,-2), Vector3D(1,1,1), 1.5f, Vector3D(1,1,1));
 
 // Define the viewport postion
@@ -60,7 +53,6 @@ void ofApp::setup(){
         Vector3D(0, 0, 1)           // Color: Azul
     ));
     
-     
     sceneObjects.push_back(make_unique<Cone>(
         Vector3D(3, 1, -4), // Posicion de peek
         Vector3D(0, -1, 0), // Vector de dirección del peek
@@ -97,7 +89,7 @@ void ofApp::draw(){
             Vector3D rayDirection = Vector3D(u,-v,-1);
             //Vector3D rayDirection = canvasPosition.subtract(viewingPosition).normalize();
             Ray ray(viewingPosition, rayDirection);
-            //Ray ray(Vector3D((x - width / 2.0f) / (width / 2.0f), (y - height / 2.0f) / (height / 2.0f),0), rayDirection);
+            //Ray ray(Vector3D(((x - width / 2.0f) / (width / 2.0f))* aspectRatio, (y - height / 2.0f) / (height / 2.0f),0), rayDirection);
             float closestT = std::numeric_limits<float>::infinity();
             
             Vector3D closestColor(0, 0, 0);
@@ -155,8 +147,8 @@ void ofApp::draw(){
                             //Phong shading
                             Vector3D phongSpecular = phongShading(lightAngle, closestColor,
                                                   Ldir, light,
-                                                  viewingPosition, hitPoint, closestNormal);
-                           
+                                                  ray.origin, hitPoint, closestNormal);
+                           //Final color
                             Vector3D finalColor =lambColor.add(phongSpecular.add(closestColor.scale(0.1f)));
                             ofSetColor(finalColor.x * 255, finalColor.y * 255, finalColor.z * 255);
                             ofDrawRectangle(x, y, 1, 1); // Dibujar píxel
