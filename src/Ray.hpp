@@ -14,7 +14,7 @@ class Ray{
 public:
     Vector3D origin;
     Vector3D direction;
-    
+    Ray();
     // Constructor functions
     Ray(Vector3D origin, Vector3D direction): origin(origin), direction(direction){}
     

@@ -22,7 +22,9 @@ using std::chrono::milliseconds;
 Light light(Vector3D(-2,4,-2), Vector3D(1,1,1), 1.5f, Vector3D(1,1,1));
 
 // Define the viewport postion
-Vector3D viewingPosition(0,0,0);
+Vector3D viewingPosition(0,0,1.5f);
+bool parallelProjection = false;
+
 
 vector<std::unique_ptr<SceneObject>> sceneObjects;
 
@@ -97,17 +99,24 @@ void ofApp::draw(){
         for(int y=0; y<height; y++){
            
             float aspectRatio = 640.0f / 480.0f;
+            float scale = 3.0f;
             // Getting the center coordinate of every pixel
-            float u = (x - width / 2.0f) / (width / 2.0f) * aspectRatio; // Ajusta el ancho
-            float v = (y - height / 2.0f) / (height / 2.0f);
+            float u = (x - width / 2.0f) / (width / 2.0f) * aspectRatio * scale; // Ajusta el ancho
+            float v = (y - height / 2.0f) / (height / 2.0f) * scale;
             
             // Define the direction
             Vector3D canvasPosition(u,-v,-1);
             Vector3D rayDirection = Vector3D(u,-v,-1);
             //Vector3D rayDirection = canvasPosition.subtract(viewingPosition).normalize();
             Ray ray(viewingPosition, rayDirection);
-            //Ray ray(Vector3D(((x - width / 2.0f) / (width / 2.0f))* aspectRatio, (y - height / 2.0f) / (height / 2.0f),0), rayDirection);
             
+            if (parallelProjection) {
+                ray.origin = Vector3D(u,-v,0);
+                ray.direction = Vector3D(0,0,-1);
+            }else{ // Perspective
+                ray.origin = viewingPosition;
+                ray.direction = canvasPosition.subtract(viewingPosition).normalize();
+            }
             float closestT = std::numeric_limits<float>::infinity(); //
             
             Vector3D closestColor(0, 0, 0); // Variable to store closest figure color detected
@@ -140,6 +149,7 @@ void ofApp::draw(){
                         Vector3D hitColor2, normalTHit2;
                         if (obj->intersect(shadowRay, t2, hitColor2, normalTHit2)) {
                             Vector3D shadowHitPoint = shadowRay.origin.add(shadowRay.direction.scale(t2));
+                            // Calculate the closest shawray collision with another object
                             float distanceToLight = light.lightPosition.subtract(shadowHitPoint).magnitude();
                             if (t2 < distanceToLight) {
                                 inShadow = true;
@@ -176,6 +186,7 @@ void ofApp::draw(){
                             ofDrawRectangle(x, y, 1, 1); // Dibujar píxel
                         }
                         else{
+                            // if the ray doesnt collide with anything, draw darkness
                             ofSetColor(0, 0, 0);
                             ofDrawRectangle(x, y, 1, 1); // Dibujar píxel
                         }
@@ -188,7 +199,7 @@ void ofApp::draw(){
     /* Getting number of milliseconds as a double. */
     duration<double, std::milli> ms_double = t2 - t1;
     
-    std::cout << ms_double.count() << "ms\n";
+    printf("CPU: 8-core ARM-based design (4 performance cores + 4 efficiency cores) took %f ms\n", ms_double.count());
 }
 //--------------------------------------------------------------
 void ofApp::exit(){
@@ -197,6 +208,21 @@ void ofApp::exit(){
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
+    
+        //left
+       if (key == 57356){
+           
+           parallelProjection = false;
+           cout<<"Perspective Activated"<<endl;
+           
+           
+       }//right
+       if (key == 57358){
+           
+           parallelProjection = true;
+           cout<<"Parallel Activated"<<endl;
+           
+       }
 
 }
 
