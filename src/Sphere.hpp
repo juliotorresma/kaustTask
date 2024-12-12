@@ -29,10 +29,7 @@ public:
            float radius):
     center(center), sphereColor(sphereColor), radius(radius){}
     
-    
-    
     Vector3D findNormal(Vector3D pointInT, Vector3D center) const;
-    Vector3D shading(Ray ray, Light light, Vector3D normal, Vector3D hitPoint);
     
     virtual bool intersect(Ray ray, float& t, Vector3D& color, Vector3D& normalTHit) {
         Vector3D OC = ray.origin.subtract(center);

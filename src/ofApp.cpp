@@ -8,10 +8,16 @@
 #include "Light.hpp"
 #include "Plane.hpp"
 #include <vector>
+#include <chrono>
 #include <memory>
 
 using std::make_shared;
 using std::shared_ptr;
+using std::chrono::high_resolution_clock;
+using std::chrono::duration_cast;
+using std::chrono::duration;
+using std::chrono::milliseconds;
+
 
 Light light(Vector3D(-2,4,-2), Vector3D(1,1,1), 1.5f, Vector3D(1,1,1));
 
@@ -22,11 +28,16 @@ vector<std::unique_ptr<SceneObject>> sceneObjects;
 
 Vector3D phongShading(float lightAngle, Vector3D& closestColor, Vector3D& Ldir, Light& light, Vector3D& viewPosition, Vector3D& closestHitPoint, Vector3D& closestNormal){
     
+    // Vector V is the one that begins at hitpoint and direction to the viewpoint
     Vector3D V = viewPosition.subtract(closestHitPoint).normalize();
     
+    // Vector H is the sum of V and light direction, we will use it later to calculate the angle between the normal.
     Vector3D H = (Ldir.add(V)).normalize();
+    
+    // Checking the specular factor, if it is big the specular is going to be small
     float specFactor = std::pow(std::max(0.0f, closestNormal.dot(H)), light.phongExponent);
     
+    // final formula to calculate the phong shading
     Vector3D specular = Vector3D (light.diffuseReflectanceColor.x * light.lightIntensity.x * specFactor,
                                   light.diffuseReflectanceColor.y * light.lightIntensity.y * specFactor,
                                   light.diffuseReflectanceColor.z * light.lightIntensity.z * specFactor);
@@ -45,7 +56,9 @@ Vector3D lambertianShading(float lightAngle, Vector3D& closestColor, Vector3D& l
 //--------------------------------------------------------------
 void ofApp::setup(){
     
-    sceneObjects.push_back(make_unique<Sphere>(Vector3D(0, 0, -5), Vector3D(1, 0, 0), 1.0f));
+    sceneObjects.push_back(make_unique<Sphere>(Vector3D(0, 0, -5), // central position
+                                               Vector3D(1, 0, 0), // color
+                                               1.0f)); //radius
     
     sceneObjects.push_back(make_unique<Ellipsoid>(
         Vector3D(-3, 2, -6),          // Centro de la elipse
@@ -74,13 +87,17 @@ void ofApp::update(){
 
 //--------------------------------------------------------------
 void ofApp::draw(){
+    
+    auto t1 = high_resolution_clock::now();
+    
     int width = ofGetWidth();
     int height = ofGetHeight();
+    // Nested for to iterate through every pixel
     for(int x=0; x<width; x++){
         for(int y=0; y<height; y++){
            
             float aspectRatio = 640.0f / 480.0f;
-
+            // Getting the center coordinate of every pixel
             float u = (x - width / 2.0f) / (width / 2.0f) * aspectRatio; // Ajusta el ancho
             float v = (y - height / 2.0f) / (height / 2.0f);
             
@@ -90,26 +107,30 @@ void ofApp::draw(){
             //Vector3D rayDirection = canvasPosition.subtract(viewingPosition).normalize();
             Ray ray(viewingPosition, rayDirection);
             //Ray ray(Vector3D(((x - width / 2.0f) / (width / 2.0f))* aspectRatio, (y - height / 2.0f) / (height / 2.0f),0), rayDirection);
-            float closestT = std::numeric_limits<float>::infinity();
             
-            Vector3D closestColor(0, 0, 0);
-            Vector3D closestNormal(0, 0, 0);
+            float closestT = std::numeric_limits<float>::infinity(); //
             
+            Vector3D closestColor(0, 0, 0); // Variable to store closest figure color detected
+            Vector3D closestNormal(0, 0, 0);// Variable to store closest figure normal detected
+            // Iterate though every SceneObject to check witch one is the closest
             for (const auto& obj : sceneObjects){
+                
                 float t;
                 Vector3D hitColor;
                 Vector3D normalTHit;
-                
+                // Calling virtual boolean function of a SceneObject
                 if (obj->intersect(ray, t, hitColor, normalTHit)) {
                     if (t<closestT){
                         closestT = t;
                         closestColor = hitColor;
-                        closestNormal = normalTHit;
+                        closestNormal = normalTHit; // Updating closest hitpoint info
                     }
                 }
             }
             
+            // Ray equation solved
             Vector3D hitPoint = ray.origin.add(ray.direction.scale(closestT));
+            // Vector poiting to the light
             Vector3D Ldir = light.lightPosition.subtract(hitPoint).normalize();
             
                     Ray shadowRay(hitPoint.add(Ldir.scale(1e-3f)), Ldir);
@@ -127,7 +148,7 @@ void ofApp::draw(){
                         }
                     }
 
-                    // Si el punto está en sombra, dibujar el píxel negro
+                    // If the object is blocking light rays, draw a shadow with ambient light
                     if (inShadow) {
                         Vector3D finalColor2 = closestColor.scale(0.1f);
                         ofSetColor(finalColor2.x*255, finalColor2.y*255, finalColor2.z*255);
@@ -135,6 +156,7 @@ void ofApp::draw(){
                         
                     }
                     else{
+                        // Calulate angle between light direction and figure normal
                         float lightAngle = std::max(0.0f,closestNormal.dot(Ldir));
                         
                         if (lightAngle>0){
@@ -160,6 +182,13 @@ void ofApp::draw(){
                     }
         }
     }
+    auto t2 = high_resolution_clock::now();
+    auto ms_int = duration_cast<milliseconds>(t2 - t1);
+
+    /* Getting number of milliseconds as a double. */
+    duration<double, std::milli> ms_double = t2 - t1;
+    
+    std::cout << ms_double.count() << "ms\n";
 }
 //--------------------------------------------------------------
 void ofApp::exit(){
